@@ -9,11 +9,10 @@
   <script>
   import axios from "axios";
   export default {
-    name: "Page",
+    name: "testsignup",
     components: {},
     data() {
       return {
-        name: "",
       };
     },
     mounted(){

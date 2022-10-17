@@ -23,8 +23,8 @@
             </div>
             <div class="form-input">
               <span>Password</span>
-              <input v-model="password" ref="password" type="password" />
-              <button class="btn">Show password</button>
+              <input v-model="password" :type="passwordFieldType" ref="password" type="password" />
+              <button @click="switchVisibility"  class="btn">Show / Hide Password</button>
             </div>
             <div class="remember">
               <label
@@ -32,7 +32,6 @@
                 me</label
               >
             </div>
-            <div class="show-text"><h1 class=".toast .toast-success"></h1></div>
             <div class="form-input">
               <input
                 @click="
@@ -42,6 +41,7 @@
                 value="Sign In"
               />
             </div>
+            <div v-if="error" class="toast toast-danger" role="alert">{{error}}</div>
             <div class="form-input">
               <!-- <p>Forgot Password?</p> -->
               <button class="btn" @click="showPopup = true">
@@ -103,7 +103,8 @@ export default {
       password: "",
       checkRemember: "",
       showPopup: true,
-      toast: ""
+      passwordFieldType: "password",
+      error: "",
       }
     },
     methods: {
@@ -127,13 +128,14 @@ export default {
               });
               localStorage.setItem("rememberLogin", parsed);
             } else {
-              //localStorage.removeItem("rememberLogin");
+              localStorage.removeItem("rememberLogin");
             }
             //localStorage.setItem("user-info",JSON.stringify(result.data))
             this.$router.push({ name: "afterLogin" });
           })
-          .catch((err) => console.log("error", err));
+          .catch((err) => this.error = "email and password error");
       },
+
       loginCheck() {
         this.alert = "";
         userFront
@@ -146,6 +148,12 @@ export default {
             this.alert = error.message;
           });
       },
+      switchVisibility() {
+      this.passwordFieldType = this.passwordFieldType === "password" ? "text" : "password";
+    },
+
+    
+
     },
     mounted() {
       if (localStorage.getItem("rememberLogin")) {
